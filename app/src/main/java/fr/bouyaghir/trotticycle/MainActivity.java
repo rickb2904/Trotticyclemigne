@@ -119,33 +119,151 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // Marker 2 station marquage au sol
+        Button button2 = new Button(this);
+        button2.setText("Y ALLER");
+
+// Marker 2 station marquage au sol
         Marker marker2 = new Marker(map);
         marker2.setPosition(new GeoPoint(46.627243,0.339631));
         marker2.setTitle("Station 2");
         marker2.setSnippet("Bois 2");
         marker2.setIcon(Marker);
-        marker2.setIcon(Marker);
+        ((ViewGroup) marker2.getInfoWindow().getView()).addView(button2);
         map.getOverlays().add(marker2);
 
-        // Marker 3 station marquage au sol
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Récupérer la position actuelle de l'utilisateur
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                if (startPoint == null) {
+                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Créer une liste de points pour le trajet
+                ArrayList<GeoPoint> waypoints = new ArrayList<>();
+                waypoints.add(startPoint);
+                waypoints.add(marker2.getPosition());
+
+                // Exécuter l'opération de réseau dans un AsyncTask
+                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
+                    @Override
+                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
+                        // Calculer la route entre les points
+                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
+                        Road road = roadManager.getRoad(params[0]);
+                        return road;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Road road) {
+                        // Afficher le trajet sur la carte
+                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
+                        map.getOverlays().add(roadOverlay);
+                        map.invalidate(); // forcer la mise à jour de l'affichage
+                    }
+                }.execute(waypoints);
+            }
+        });
+
+        Button button3 = new Button(this);
+        button3.setText("Y ALLER");
+
+// Marker 3 station marquage au sol
         Marker marker3 = new Marker(map);
         marker3.setPosition(new GeoPoint(46.634269,0.343020));
         marker3.setTitle("Station 3");
         marker3.setSnippet("Bois 3");
         marker3.setIcon(Marker);
-        marker3.setIcon(Marker);
+        ((ViewGroup) marker3.getInfoWindow().getView()).addView(button3);
         map.getOverlays().add(marker3);
 
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Récupérer la position actuelle de l'utilisateur
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                if (startPoint == null) {
+                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-        // Marker 4 station marquage au sol
+                // Créer une liste de points pour le trajet
+                ArrayList<GeoPoint> waypoints = new ArrayList<>();
+                waypoints.add(startPoint);
+                waypoints.add(marker3.getPosition());
+
+                // Exécuter l'opération de réseau dans un AsyncTask
+                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
+                    @Override
+                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
+                        // Calculer la route entre les points
+                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
+                        Road road = roadManager.getRoad(params[0]);
+                        return road;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Road road) {
+                        // Afficher le trajet sur la carte
+                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
+                        map.getOverlays().add(roadOverlay);
+                        map.invalidate(); // forcer la mise à jour de l'affichage
+                    }
+                }.execute(waypoints);
+            }
+        });
+
+
+        Button button4 = new Button(this);
+        button4.setText("Y ALLER");
+
+// Marker 4 station marquage au sol
         Marker marker4 = new Marker(map);
         marker4.setPosition(new GeoPoint(46.626141,0.305015));
         marker4.setTitle("Station 4");
         marker4.setSnippet("Bois 4");
         marker4.setIcon(Marker);
-        marker4.setIcon(Marker);
+        ((ViewGroup) marker4.getInfoWindow().getView()).addView(button4);
         map.getOverlays().add(marker4);
+
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Récupérer la position actuelle de l'utilisateur
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                if (startPoint == null) {
+                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Créer une liste de points pour le trajet
+                ArrayList<GeoPoint> waypoints = new ArrayList<>();
+                waypoints.add(startPoint);
+                waypoints.add(marker4.getPosition());
+
+                // Exécuter l'opération de réseau dans un AsyncTask
+                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
+                    @Override
+                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
+                        // Calculer la route entre les points
+                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
+                        Road road = roadManager.getRoad(params[0]);
+                        return road;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Road road) {
+                        // Afficher le trajet sur la carte
+                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
+                        map.getOverlays().add(roadOverlay);
+                        map.invalidate(); // forcer la mise à jour de l'affichage
+                    }
+                }.execute(waypoints);
+            }
+        });
+
 
 
         // Marker 5 station marquage au sol

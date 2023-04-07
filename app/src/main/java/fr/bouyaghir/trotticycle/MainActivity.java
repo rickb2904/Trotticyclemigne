@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 waypoints.add(startPoint);
                 waypoints.add(marker4.getPosition());
 
+
                 // Exécuter l'opération de réseau dans un AsyncTask
                 new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
                     @Override

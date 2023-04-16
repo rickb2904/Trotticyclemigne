@@ -34,6 +34,7 @@ import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -128,44 +129,8 @@ public class MainActivity extends AppCompatActivity {
         marker2.setTitle("Station 2");
         marker2.setSnippet("Bois 2");
         marker2.setIcon(Marker);
-        ((ViewGroup) marker2.getInfoWindow().getView()).addView(button2);
         map.getOverlays().add(marker2);
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Récupérer la position actuelle de l'utilisateur
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                if (startPoint == null) {
-                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Créer une liste de points pour le trajet
-                ArrayList<GeoPoint> waypoints = new ArrayList<>();
-                waypoints.add(startPoint);
-                waypoints.add(marker2.getPosition());
-
-                // Exécuter l'opération de réseau dans un AsyncTask
-                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
-                    @Override
-                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
-                        // Calculer la route entre les points
-                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
-                        Road road = roadManager.getRoad(params[0]);
-                        return road;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Road road) {
-                        // Afficher le trajet sur la carte
-                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
-                        map.getOverlays().add(roadOverlay);
-                        map.invalidate(); // forcer la mise à jour de l'affichage
-                    }
-                }.execute(waypoints);
-            }
-        });
+        ;
 
         Button button3 = new Button(this);
         button3.setText("Y ALLER");
@@ -176,44 +141,9 @@ public class MainActivity extends AppCompatActivity {
         marker3.setTitle("Station 3");
         marker3.setSnippet("Bois 3");
         marker3.setIcon(Marker);
-        ((ViewGroup) marker3.getInfoWindow().getView()).addView(button3);
         map.getOverlays().add(marker3);
 
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Récupérer la position actuelle de l'utilisateur
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                if (startPoint == null) {
-                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                // Créer une liste de points pour le trajet
-                ArrayList<GeoPoint> waypoints = new ArrayList<>();
-                waypoints.add(startPoint);
-                waypoints.add(marker3.getPosition());
-
-                // Exécuter l'opération de réseau dans un AsyncTask
-                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
-                    @Override
-                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
-                        // Calculer la route entre les points
-                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
-                        Road road = roadManager.getRoad(params[0]);
-                        return road;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Road road) {
-                        // Afficher le trajet sur la carte
-                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
-                        map.getOverlays().add(roadOverlay);
-                        map.invalidate(); // forcer la mise à jour de l'affichage
-                    }
-                }.execute(waypoints);
-            }
-        });
 
 
         Button button4 = new Button(this);
@@ -225,46 +155,7 @@ public class MainActivity extends AppCompatActivity {
         marker4.setTitle("Station 4");
         marker4.setSnippet("Bois 4");
         marker4.setIcon(Marker);
-        ((ViewGroup) marker4.getInfoWindow().getView()).addView(button4);
         map.getOverlays().add(marker4);
-
-        button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Récupérer la position actuelle de l'utilisateur
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                if (startPoint == null) {
-                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Créer une liste de points pour le trajet
-                ArrayList<GeoPoint> waypoints = new ArrayList<>();
-                waypoints.add(startPoint);
-                waypoints.add(marker4.getPosition());
-
-
-                // Exécuter l'opération de réseau dans un AsyncTask
-                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
-                    @Override
-                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
-                        // Calculer la route entre les points
-                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
-                        Road road = roadManager.getRoad(params[0]);
-                        return road;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Road road) {
-                        // Afficher le trajet sur la carte
-                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
-                        map.getOverlays().add(roadOverlay);
-                        map.invalidate(); // forcer la mise à jour de l'affichage
-                    }
-                }.execute(waypoints);
-            }
-        });
-
 
 
         // Marker 5 station marquage au sol
@@ -356,11 +247,12 @@ public class MainActivity extends AppCompatActivity {
         mCompassOverlay.enableCompass();
         map.getOverlays().add(mCompassOverlay);
 
-        // Ajouter un Overlay pour afficher la localisation de l'utilisateur
-        myLocationOverlay = new MyLocationNewOverlay(map);
+        // Initialiser l'overlay de la position de l'utilisateur
+        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
+        myLocationOverlay.enableMyLocation(); // Accès à la localisation
         map.getOverlays().add(myLocationOverlay);
 
-        // Ajouter un bouton pour centrer la carte sur la position de l'utilisateur
+// Ajouter un bouton pour centrer la carte sur la position de l'utilisateur
         Button myLocationButton = findViewById(R.id.my_location_button);
         myLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -375,17 +267,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+// Créer un LocationListener pour recevoir les mises à jour de la position de l'utilisateur
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                // Récupérer la nouvelle position de l'utilisateur
                 GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
-                myLocationOverlay.setEnabled(true);
-                myLocationOverlay.enableMyLocation(); //Accès à la localisation
-                myLocationOverlay.setDrawAccuracyEnabled(true);
 
-                //Si la map est centré
+                // Activer l'overlay de la position de l'utilisateur
+                myLocationOverlay.setEnabled(true);
+
+                //Si la map est centrée sur la position de l'utilisateur
                 if (centerMapOnLocation) {
                     map.getController().animateTo(point);
                 }
@@ -395,22 +287,29 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                // Gérer les changements de statut du fournisseur de localisation
+            }
+
             @Override
-            public void onProviderEnabled(String provider) {}
+            public void onProviderEnabled(String provider) {
+                // Gérer l'activation du fournisseur de localisation
+            }
+
             @Override
-            public void onProviderDisabled(String provider) {}
+            public void onProviderDisabled(String provider) {
+                // Gérer la désactivation du fournisseur de localisation
+            }
         };
 
-        // Vérifier si l'application a la permission d'accéder à la localisation de l'utilisateur
+// Vérifier si l'application a la permission d'accéder à la localisation de l'utilisateur
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
         } else {
             // Si l'application a la permission, commencer à écouter les mises à jour de la localisation de l'utilisateur
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
-
 
 
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(), items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {

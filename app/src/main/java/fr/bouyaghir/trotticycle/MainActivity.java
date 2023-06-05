@@ -43,6 +43,7 @@ import org.osmdroid.bonuspack.routing.Road;
 
 public class MainActivity extends AppCompatActivity {
 
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
     private MapView map;
     private boolean centerMapOnLocation = true;
     private MyLocationNewOverlay myLocationOverlay;
@@ -68,175 +69,29 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<OverlayItem> items = new ArrayList<>();
 
-        // Créer un marqueur
+        //instanciation des marqueurs
+
         Drawable Marker = ContextCompat.getDrawable(this, R.drawable.ic_marker_red);
 
-        Button button = new Button(this);
-        button.setText("Y ALLER");
+        // création des marqueurs pour les points situés vers l'ouest
 
-
-        // Marker 1 station marquage au sol
         Marker marker1 = new Marker(map);
-        marker1.setPosition(new GeoPoint(46.634335,0.331986));
-        marker1.setTitle("Station 1");
-        marker1.setSnippet("Bois 1");
+        double latitude = 46.6333;
+        double longitude = 0.31800;
+        String nom = "Station 1";
+        String description = "Bois 1";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker1.setPosition(new GeoPoint(latitude, longitude));
+        marker1.setTitle(nom);
+        marker1.setSnippet(description);
         marker1.setIcon(Marker);
-        ((ViewGroup) marker1.getInfoWindow().getView()).addView(button);
         map.getOverlays().add(marker1);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Récupérer la position actuelle de l'utilisateur
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                if (startPoint == null) {
-                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                // Créer une liste de points pour le trajet
-                ArrayList<GeoPoint> waypoints = new ArrayList<>();
-                waypoints.add(startPoint);
-                waypoints.add(marker1.getPosition()); // remplacer marker1.getPosition() par la position de la destination souhaitée
+        // création des marqueurs pour les points situés vers l'est
 
-                // Exécuter l'opération de réseau dans un AsyncTask
-                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
-                    @Override
-                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
-                        // Calculer la route entre les points
-                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
-                        Road road = roadManager.getRoad(params[0]);
-                        return road;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Road road) {
-                        // Afficher le trajet sur la carte
-                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
-                        map.getOverlays().add(roadOverlay);
-                        map.invalidate(); // forcer la mise à jour de l'affichage
-                    }
-                }.execute(waypoints);
-            }
-        });
-
-
-        Button button2 = new Button(this);
-        button2.setText("Y ALLER");
-
-// Marker 2 station marquage au sol
-        Marker marker2 = new Marker(map);
-        marker2.setPosition(new GeoPoint(46.627243,0.339631));
-        marker2.setTitle("Station 2");
-        marker2.setSnippet("Bois 2");
-        marker2.setIcon(Marker);
-        map.getOverlays().add(marker2);
-        ;
-
-        Button button3 = new Button(this);
-        button3.setText("Y ALLER");
-
-// Marker 3 station marquage au sol
-        Marker marker3 = new Marker(map);
-        marker3.setPosition(new GeoPoint(46.634269,0.343020));
-        marker3.setTitle("Station 3");
-        marker3.setSnippet("Bois 3");
-        marker3.setIcon(Marker);
-        map.getOverlays().add(marker3);
-
-
-
-
-        Button button4 = new Button(this);
-        button4.setText("Y ALLER");
-
-// Marker 4 station marquage au sol
-        Marker marker4 = new Marker(map);
-        marker4.setPosition(new GeoPoint(46.626141,0.305015));
-        marker4.setTitle("Station 4");
-        marker4.setSnippet("Bois 4");
-        marker4.setIcon(Marker);
-        map.getOverlays().add(marker4);
-
-
-        // Marker 5 station marquage au sol
-        Marker marker5 = new Marker(map);
-        marker5.setPosition(new GeoPoint(46.629708,0.304255));
-        marker5.setTitle("Station 5");
-        marker5.setSnippet("Bois 5");
-        marker5.setIcon(Marker);
-        marker5.setIcon(Marker);
-        map.getOverlays().add(marker5);
-
-
-        // Marker 6 station marquage au sol
-        Marker marker6 = new Marker(map);
-        marker6.setPosition(new GeoPoint(46.630532,0.302098));
-        marker6.setTitle("Station 6");
-        marker6.setSnippet("Bois 6");
-        marker6.setIcon(Marker);
-        marker6.setIcon(Marker);
-        map.getOverlays().add(marker6);
-
-
-        // Marker 7 station marquage au sol
-        Marker marker7 = new Marker(map);
-        marker7.setPosition(new GeoPoint(46.620046,0.274485));
-        marker7.setTitle("Station 7");
-        marker7.setSnippet("Bois 7");
-        marker7.setIcon(Marker);
-        marker7.setIcon(Marker);
-        map.getOverlays().add(marker7 );
-
-
-        // Marker 7 station marquage au sol
-        Marker marker9 = new Marker(map);
-        marker9.setPosition(new GeoPoint(46.625133,0.279752));
-        marker9.setTitle("Station 7");
-        marker9.setSnippet("Bois 7");
-        marker9.setIcon(Marker);
-        marker9.setIcon(Marker);
-        map.getOverlays().add(marker9);
-
-        Marker Station3 = new Marker(map);
-        Station3.setPosition(new GeoPoint(46.626667,0.311561));
-        Station3.setTitle("Rue Louis Plaud");
-        Station3.setSnippet("Trotti 3 ");
-        Station3.setIcon(Marker);
-        Station3.setIcon(Marker);
-        map.getOverlays().add(Station3);
-
-        Marker Station4 = new Marker(map);
-        Station4.setPosition(new GeoPoint(46.620299 ,0.311018));
-        Station4.setTitle("Eglise");
-        Station4.setSnippet("Trotti 4 ");
-        Station4.setIcon(Marker);
-        Station4.setIcon(Marker);
-        map.getOverlays().add(Station4);
-
-        Marker Station5 = new Marker(map);
-        Station5.setPosition(new GeoPoint(46.619824,0.315161));
-        Station5.setTitle("Cimetiere du Porteau");
-        Station5.setSnippet("Trotti 5 ");
-        Station5.setIcon(Marker);
-        Station5.setIcon(Marker);
-        map.getOverlays().add(Station5);
-
-        Marker Station6 = new Marker(map);
-        Station6.setPosition(new GeoPoint(46.627951,0.317551));
-        Station6.setTitle("Parc de la Comberie");
-        Station6.setSnippet("Trotti 6 ");
-        Station6.setIcon(Marker);
-        Station6.setIcon(Marker);
-        map.getOverlays().add(Station6);
-
-        Marker Station7 = new Marker(map);
-        Station7.setPosition(new GeoPoint(46.634216,0.320358));
-        Station7.setTitle("Parc des Rocheraux");
-        Station7.setSnippet("Trotti 7 ");
-        Station7.setIcon(Marker);
-        Station7.setIcon(Marker);
-        map.getOverlays().add(Station7);
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -248,37 +103,20 @@ public class MainActivity extends AppCompatActivity {
         mCompassOverlay.enableCompass();
         map.getOverlays().add(mCompassOverlay);
 
-        // Initialiser l'overlay de la position de l'utilisateur
-        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
-        myLocationOverlay.enableMyLocation(); // Accès à la localisation
+        // Ajouter un Overlay pour afficher la localisation de l'utilisateur
+        myLocationOverlay = new MyLocationNewOverlay(map);
         map.getOverlays().add(myLocationOverlay);
 
-// Ajouter un bouton pour centrer la carte sur la position de l'utilisateur
-        Button myLocationButton = findViewById(R.id.my_location_button);
-        myLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                centerMapOnLocation = true;
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                if (startPoint != null) {
-                    map.getController().animateTo(startPoint);
-                } else {
-                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-// Créer un LocationListener pour recevoir les mises à jour de la position de l'utilisateur
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                // Récupérer la nouvelle position de l'utilisateur
                 GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
-
-                // Activer l'overlay de la position de l'utilisateur
                 myLocationOverlay.setEnabled(true);
+                myLocationOverlay.enableMyLocation(); //Accès à la localisation
+                myLocationOverlay.setDrawAccuracyEnabled(true);
 
-                //Si la map est centrée sur la position de l'utilisateur
+                //Si la map est centré
                 if (centerMapOnLocation) {
                     map.getController().animateTo(point);
                 }
@@ -287,29 +125,22 @@ public class MainActivity extends AppCompatActivity {
                 centerMapOnLocation = false;
             }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-                // Gérer les changements de statut du fournisseur de localisation
-            }
 
             @Override
-            public void onProviderEnabled(String provider) {
-                // Gérer l'activation du fournisseur de localisation
-            }
-
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
             @Override
-            public void onProviderDisabled(String provider) {
-                // Gérer la désactivation du fournisseur de localisation
-            }
+            public void onProviderEnabled(String provider) {}
+            @Override
+            public void onProviderDisabled(String provider) {}
         };
 
-// Vérifier si l'application a la permission d'accéder à la localisation de l'utilisateur
+        // Vérifier si l'application a la permission d'accéder à la localisation de l'utilisateur
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
         } else {
             // Si l'application a la permission, commencer à écouter les mises à jour de la localisation de l'utilisateur
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
 
 
@@ -327,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
+
+
     }
 
 

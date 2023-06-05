@@ -4,12 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
+
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -22,38 +18,33 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
 import java.util.ArrayList;
-import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
 
 public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper dbHelper = new DatabaseHelper(this);
+
     private MapView map;
     private boolean centerMapOnLocation = true;
     private MyLocationNewOverlay myLocationOverlay;
     private static final int PERMISSION_REQUEST_LOCATION = 1;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         Configuration.getInstance().load(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
@@ -62,36 +53,334 @@ public class MainActivity extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
 
-        GeoPoint startPoint = new GeoPoint(46.6333, 0.3167);
-        IMapController mapController = map.getController();
-        mapController.setZoom(18.0);
-        mapController.setCenter(startPoint);
+        Drawable markerDrawable = ContextCompat.getDrawable(this, R.drawable.ic_marker_red);
 
-        ArrayList<OverlayItem> items = new ArrayList<>();
+        // Création des marqueurs pour les points situés vers l'ouest
 
-        //instanciation des marqueurs
-
-        Drawable Marker = ContextCompat.getDrawable(this, R.drawable.ic_marker_red);
-
-        // création des marqueurs pour les points situés vers l'ouest
-
+        // Point 1
         Marker marker1 = new Marker(map);
-        double latitude = 46.6333;
-        double longitude = 0.31800;
-        String nom = "Station 1";
-        String description = "Bois 1";
+        double latitude = 46.619824;
+        double longitude = 0.315161;
+        String nom = "Cimetière";
+        String description = "Marquage au sol";
         if (!dbHelper.pointExist(latitude, longitude)) {
             dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
         }
         marker1.setPosition(new GeoPoint(latitude, longitude));
         marker1.setTitle(nom);
         marker1.setSnippet(description);
-        marker1.setIcon(Marker);
+        marker1.setIcon(markerDrawable);
         map.getOverlays().add(marker1);
 
+        marker1.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
 
-        // création des marqueurs pour les points situés vers l'est
+        // Point 2
+        Marker marker2 = new Marker(map);
+        latitude = 46.620299;
+        longitude = 0.311018;
+        nom = "Stade";
+        description = "Marquage au sol";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker2.setPosition(new GeoPoint(latitude, longitude));
+        marker2.setTitle(nom);
+        marker2.setSnippet(description);
+        marker2.setIcon(markerDrawable);
+        map.getOverlays().add(marker2);
 
+        marker2.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 3
+        Marker marker3 = new Marker(map);
+        latitude = 46.626667;
+        longitude = 0.311561;
+        nom = "Conservatoire";
+        description = "Marquage au sol";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker3.setPosition(new GeoPoint(latitude, longitude));
+        marker3.setTitle(nom);
+        marker3.setSnippet(description);
+        marker3.setIcon(markerDrawable);
+        map.getOverlays().add(marker3);
+
+        marker3.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 4
+        Marker marker4 = new Marker(map);
+        latitude = 46.627951;
+        longitude = 0.317551;
+        nom = "La Comberie";
+        description = "Marquage au sol";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker4.setPosition(new GeoPoint(latitude, longitude));
+        marker4.setTitle(nom);
+        marker4.setSnippet(description);
+        marker4.setIcon(markerDrawable);
+        map.getOverlays().add(marker4);
+
+        marker4.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 5
+        Marker marker5 = new Marker(map);
+        latitude = 46.634216;
+        longitude = 0.320358;
+        nom = "City Park des Rochereaux";
+        description = "Marquage au sol";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker5.setPosition(new GeoPoint(latitude, longitude));
+        marker5.setTitle(nom);
+        marker5.setSnippet(description);
+        marker5.setIcon(markerDrawable);
+        map.getOverlays().add(marker5);
+
+        marker5.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 6
+        Marker marker6 = new Marker(map);
+        latitude = 46.634335;
+        longitude = 0.331986;
+        nom = "École Desnos";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker6.setPosition(new GeoPoint(latitude, longitude));
+        marker6.setTitle(nom);
+        marker6.setSnippet(description);
+        marker6.setIcon(markerDrawable);
+        map.getOverlays().add(marker6);
+
+        marker6.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 7
+        Marker marker7 = new Marker(map);
+        latitude = 46.627243;
+        longitude = 0.339631;
+        nom = "City Park des Cosses";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker7.setPosition(new GeoPoint(latitude, longitude));
+        marker7.setTitle(nom);
+        marker7.setSnippet(description);
+        marker7.setIcon(markerDrawable);
+        map.getOverlays().add(marker7);
+
+        marker7.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 8
+        Marker marker8 = new Marker(map);
+        latitude = 46.634269;
+        longitude = 0.343020;
+        nom = "La Rivardière";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker8.setPosition(new GeoPoint(latitude, longitude));
+        marker8.setTitle(nom);
+        marker8.setSnippet(description);
+        marker8.setIcon(markerDrawable);
+        map.getOverlays().add(marker8);
+
+        marker8.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 9
+        Marker marker9 = new Marker(map);
+        latitude = 46.626141;
+        longitude = 0.305015;
+        nom = "Square des Coudres";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker9.setPosition(new GeoPoint(latitude, longitude));
+        marker9.setTitle(nom);
+        marker9.setSnippet(description);
+        marker9.setIcon(markerDrawable);
+        map.getOverlays().add(marker9);
+
+        marker9.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 10
+        Marker marker10 = new Marker(map);
+        latitude = 46.629708;
+        longitude = 0.304255;
+        nom = "Monfleury";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker10.setPosition(new GeoPoint(latitude, longitude));
+        marker10.setTitle(nom);
+        marker10.setSnippet(description);
+        marker10.setIcon(markerDrawable);
+        map.getOverlays().add(marker10);
+
+        marker10.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 11
+        Marker marker11 = new Marker(map);
+        latitude = 46.630532;
+        longitude = 0.302098;
+        nom = "Les Hauts de l’Auxance";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker11.setPosition(new GeoPoint(latitude, longitude));
+        marker11.setTitle(nom);
+        marker11.setSnippet(description);
+        marker11.setIcon(markerDrawable);
+        map.getOverlays().add(marker11);
+
+        marker11.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 12
+        Marker marker12 = new Marker(map);
+        latitude = 46.620046;
+        longitude = 0.274485;
+        nom = "Moulinet";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker12.setPosition(new GeoPoint(latitude, longitude));
+        marker12.setTitle(nom);
+        marker12.setSnippet(description);
+        marker12.setIcon(markerDrawable);
+        map.getOverlays().add(marker12);
+
+        marker12.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
+
+        // Point 13
+        Marker marker13 = new Marker(map);
+        latitude = 46.625133;
+        longitude = 0.279752;
+        nom = "École de Limbre";
+        description = "Station virtuelle";
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
+        marker13.setPosition(new GeoPoint(latitude, longitude));
+        marker13.setTitle(nom);
+        marker13.setSnippet(description);
+        marker13.setIcon(markerDrawable);
+        map.getOverlays().add(marker13);
+
+        marker13.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                GeoPoint endPoint = marker.getPosition();
+                createRoute(startPoint, endPoint);
+                return true;
+            }
+        });
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -103,81 +392,130 @@ public class MainActivity extends AppCompatActivity {
         mCompassOverlay.enableCompass();
         map.getOverlays().add(mCompassOverlay);
 
-        // Ajouter un Overlay pour afficher la localisation de l'utilisateur
-        myLocationOverlay = new MyLocationNewOverlay(map);
-        map.getOverlays().add(myLocationOverlay);
+        Button myLocationButton = findViewById(R.id.my_location_button);
+        myLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                centerMapOnLocation = true;
+                GeoPoint startPoint = myLocationOverlay.getMyLocation();
+                if (startPoint != null) {
+                    map.getController().animateTo(startPoint);
+                } else {
+                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
                 myLocationOverlay.setEnabled(true);
-                myLocationOverlay.enableMyLocation(); //Accès à la localisation
-                myLocationOverlay.setDrawAccuracyEnabled(true);
-
-                //Si la map est centré
                 if (centerMapOnLocation) {
-                    map.getController().animateTo(point);
+                    map.getController().setZoom(18.0);
+                    map.getController().setCenter(point);
                 }
-
-                // Réinitialiser le flag de centrage de la carte
                 centerMapOnLocation = false;
             }
 
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
 
             @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onProviderEnabled(String provider) {
+            }
+
             @Override
-            public void onProviderEnabled(String provider) {}
-            @Override
-            public void onProviderDisabled(String provider) {}
+            public void onProviderDisabled(String provider) {
+            }
         };
 
-        // Vérifier si l'application a la permission d'accéder à la localisation de l'utilisateur
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
         } else {
-            // Si l'application a la permission, commencer à écouter les mises à jour de la localisation de l'utilisateur
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
 
-
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(), items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-            @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onItemLongPress(int index, OverlayItem item) {
-                return false;
-            }
-        });
-
-        mOverlay.setFocusItemsOnTap(true);
-        map.getOverlays().add(mOverlay);
-
-
-    }
-
-
-    @Override
-    public void onPause(){
-
-        super.onPause();
-        map.onPause();
-
+        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
+        myLocationOverlay.enableMyLocation();
+        map.getOverlays().add(myLocationOverlay);
     }
 
     @Override
-    public void onResume(){
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                LocationListener locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
+                        myLocationOverlay.setEnabled(true);
+                        if (centerMapOnLocation) {
+                            map.getController().setZoom(18.0);
+                            map.getController().setCenter(point);
+                        }
+                        centerMapOnLocation = false;
+                    }
 
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                    }
+                };
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            } else {
+                Toast.makeText(this, "Permission de localisation refusée", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
         super.onResume();
         map.onResume();
-
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        map.onPause();
+    }
 
+    private void createRoute(GeoPoint startPoint, GeoPoint endPoint) {
+        if (startPoint != null && endPoint != null) {
+            RoadManager roadManager = new OSRMRoadManager(MainActivity.this, null);
+            ArrayList<GeoPoint> waypoints = new ArrayList<>();
+            waypoints.add(startPoint);
+            waypoints.add(endPoint);
+            Road road = roadManager.getRoad(waypoints);
+            if (road != null) {
+                // Faites quelque chose avec l'objet Road, par exemple, dessinez le trajet sur la carte
+            } else {
+                Toast.makeText(MainActivity.this, "Impossible de calculer l'itinéraire", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(MainActivity.this, "Impossible de récupérer les coordonnées de départ ou d'arrivée", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -18,9 +18,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -72,16 +69,6 @@ public class MainActivity extends AppCompatActivity {
         marker1.setIcon(markerDrawable);
         map.getOverlays().add(marker1);
 
-        marker1.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
-
         // Point 2
         Marker marker2 = new Marker(map);
         latitude = 46.620299;
@@ -96,16 +83,6 @@ public class MainActivity extends AppCompatActivity {
         marker2.setSnippet(description);
         marker2.setIcon(markerDrawable);
         map.getOverlays().add(marker2);
-
-        marker2.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
 
         // Point 3
         Marker marker3 = new Marker(map);
@@ -122,16 +99,6 @@ public class MainActivity extends AppCompatActivity {
         marker3.setIcon(markerDrawable);
         map.getOverlays().add(marker3);
 
-        marker3.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
-
         // Point 4
         Marker marker4 = new Marker(map);
         latitude = 46.627951;
@@ -146,16 +113,6 @@ public class MainActivity extends AppCompatActivity {
         marker4.setSnippet(description);
         marker4.setIcon(markerDrawable);
         map.getOverlays().add(marker4);
-
-        marker4.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
 
         // Point 5
         Marker marker5 = new Marker(map);
@@ -172,16 +129,6 @@ public class MainActivity extends AppCompatActivity {
         marker5.setIcon(markerDrawable);
         map.getOverlays().add(marker5);
 
-        marker5.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
-
         // Point 6
         Marker marker6 = new Marker(map);
         latitude = 46.634335;
@@ -196,16 +143,6 @@ public class MainActivity extends AppCompatActivity {
         marker6.setSnippet(description);
         marker6.setIcon(markerDrawable);
         map.getOverlays().add(marker6);
-
-        marker6.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
 
         // Point 7
         Marker marker7 = new Marker(map);
@@ -222,16 +159,6 @@ public class MainActivity extends AppCompatActivity {
         marker7.setIcon(markerDrawable);
         map.getOverlays().add(marker7);
 
-        marker7.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
-
         // Point 8
         Marker marker8 = new Marker(map);
         latitude = 46.634269;
@@ -246,16 +173,6 @@ public class MainActivity extends AppCompatActivity {
         marker8.setSnippet(description);
         marker8.setIcon(markerDrawable);
         map.getOverlays().add(marker8);
-
-        marker8.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
 
         // Point 9
         Marker marker9 = new Marker(map);
@@ -272,16 +189,6 @@ public class MainActivity extends AppCompatActivity {
         marker9.setIcon(markerDrawable);
         map.getOverlays().add(marker9);
 
-        marker9.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
-
         // Point 10
         Marker marker10 = new Marker(map);
         latitude = 46.629708;
@@ -296,16 +203,6 @@ public class MainActivity extends AppCompatActivity {
         marker10.setSnippet(description);
         marker10.setIcon(markerDrawable);
         map.getOverlays().add(marker10);
-
-        marker10.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
 
         // Point 11
         Marker marker11 = new Marker(map);
@@ -322,16 +219,6 @@ public class MainActivity extends AppCompatActivity {
         marker11.setIcon(markerDrawable);
         map.getOverlays().add(marker11);
 
-        marker11.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
-
         // Point 12
         Marker marker12 = new Marker(map);
         latitude = 46.620046;
@@ -346,16 +233,6 @@ public class MainActivity extends AppCompatActivity {
         marker12.setSnippet(description);
         marker12.setIcon(markerDrawable);
         map.getOverlays().add(marker12);
-
-        marker12.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
 
         // Point 13
         Marker marker13 = new Marker(map);
@@ -372,15 +249,6 @@ public class MainActivity extends AppCompatActivity {
         marker13.setIcon(markerDrawable);
         map.getOverlays().add(marker13);
 
-        marker13.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                GeoPoint endPoint = marker.getPosition();
-                createRoute(startPoint, endPoint);
-                return true;
-            }
-        });
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -500,22 +368,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         map.onPause();
-    }
-
-    private void createRoute(GeoPoint startPoint, GeoPoint endPoint) {
-        if (startPoint != null && endPoint != null) {
-            RoadManager roadManager = new OSRMRoadManager(MainActivity.this, null);
-            ArrayList<GeoPoint> waypoints = new ArrayList<>();
-            waypoints.add(startPoint);
-            waypoints.add(endPoint);
-            Road road = roadManager.getRoad(waypoints);
-            if (road != null) {
-                // Faites quelque chose avec l'objet Road, par exemple, dessinez le trajet sur la carte
-            } else {
-                Toast.makeText(MainActivity.this, "Impossible de calculer l'itinéraire", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(MainActivity.this, "Impossible de récupérer les coordonnées de départ ou d'arrivée", Toast.LENGTH_SHORT).show();
-        }
     }
 }

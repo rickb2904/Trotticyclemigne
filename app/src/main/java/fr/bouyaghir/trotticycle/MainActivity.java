@@ -33,8 +33,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    DatabaseHelper dbHelper = new DatabaseHelper(this);
-
     private MapView map;
     private boolean centerMapOnLocation = true;
     private MyLocationNewOverlay myLocationOverlay;
@@ -60,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
         double longitude = 0.315161;
         String nom = "Cimetière";
         String description = "Marquage au sol";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker1.setPosition(new GeoPoint(latitude, longitude));
         marker1.setTitle(nom);
         marker1.setSnippet(description);
@@ -75,9 +72,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.311018;
         nom = "Stade";
         description = "Marquage au sol";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker2.setPosition(new GeoPoint(latitude, longitude));
         marker2.setTitle(nom);
         marker2.setSnippet(description);
@@ -90,9 +86,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.311561;
         nom = "Conservatoire";
         description = "Marquage au sol";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker3.setPosition(new GeoPoint(latitude, longitude));
         marker3.setTitle(nom);
         marker3.setSnippet(description);
@@ -105,9 +100,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.317551;
         nom = "La Comberie";
         description = "Marquage au sol";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker4.setPosition(new GeoPoint(latitude, longitude));
         marker4.setTitle(nom);
         marker4.setSnippet(description);
@@ -120,9 +114,7 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.320358;
         nom = "City Park des Rochereaux";
         description = "Marquage au sol";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
         marker5.setPosition(new GeoPoint(latitude, longitude));
         marker5.setTitle(nom);
         marker5.setSnippet(description);
@@ -135,9 +127,7 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.331986;
         nom = "École Desnos";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
         marker6.setPosition(new GeoPoint(latitude, longitude));
         marker6.setTitle(nom);
         marker6.setSnippet(description);
@@ -150,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.339631;
         nom = "City Park des Cosses";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker7.setPosition(new GeoPoint(latitude, longitude));
         marker7.setTitle(nom);
         marker7.setSnippet(description);
@@ -165,9 +154,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.343020;
         nom = "La Rivardière";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker8.setPosition(new GeoPoint(latitude, longitude));
         marker8.setTitle(nom);
         marker8.setSnippet(description);
@@ -180,9 +168,7 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.305015;
         nom = "Square des Coudres";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
         marker9.setPosition(new GeoPoint(latitude, longitude));
         marker9.setTitle(nom);
         marker9.setSnippet(description);
@@ -195,9 +181,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.304255;
         nom = "Monfleury";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker10.setPosition(new GeoPoint(latitude, longitude));
         marker10.setTitle(nom);
         marker10.setSnippet(description);
@@ -210,9 +195,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.302098;
         nom = "Les Hauts de l’Auxance";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker11.setPosition(new GeoPoint(latitude, longitude));
         marker11.setTitle(nom);
         marker11.setSnippet(description);
@@ -225,9 +209,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.274485;
         nom = "Moulinet";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker12.setPosition(new GeoPoint(latitude, longitude));
         marker12.setTitle(nom);
         marker12.setSnippet(description);
@@ -240,9 +223,8 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.279752;
         nom = "École de Limbre";
         description = "Station virtuelle";
-        if (!dbHelper.pointExist(latitude, longitude)) {
-            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
-        }
+
+
         marker13.setPosition(new GeoPoint(latitude, longitude));
         marker13.setTitle(nom);
         marker13.setSnippet(description);

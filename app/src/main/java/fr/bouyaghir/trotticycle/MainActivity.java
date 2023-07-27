@@ -3,6 +3,7 @@ package fr.bouyaghir.trotticycle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.content.Context;
@@ -12,7 +13,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,10 +23,17 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    DatabaseHelper dbHelper = new DatabaseHelper(this);
 
     private MapView map;
     private boolean centerMapOnLocation = true;
@@ -43,20 +50,19 @@ public class MainActivity extends AppCompatActivity {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
 
-        GeoPoint startPoint = new GeoPoint(46.6333, 0.3167);
-        IMapController mapController = map.getController();
-        mapController.setZoom(18.0);
-        mapController.setCenter(startPoint);
-
         Drawable markerDrawable = ContextCompat.getDrawable(this, R.drawable.ic_marker_red);
 
-// Point 1
+        // Création des marqueurs pour les points situés vers l'ouest
+
+        // Point 1
         Marker marker1 = new Marker(map);
         double latitude = 46.619824;
         double longitude = 0.315161;
         String nom = "Cimetière";
         String description = "Marquage au sol";
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker1.setPosition(new GeoPoint(latitude, longitude));
         marker1.setTitle(nom);
         marker1.setSnippet(description);
@@ -69,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.311018;
         nom = "Stade";
         description = "Marquage au sol";
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker2.setPosition(new GeoPoint(latitude, longitude));
         marker2.setTitle(nom);
         marker2.setSnippet(description);
@@ -82,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.311561;
         nom = "Conservatoire";
         description = "Marquage au sol";
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker3.setPosition(new GeoPoint(latitude, longitude));
         marker3.setTitle(nom);
         marker3.setSnippet(description);
@@ -95,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.317551;
         nom = "La Comberie";
         description = "Marquage au sol";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker4.setPosition(new GeoPoint(latitude, longitude));
         marker4.setTitle(nom);
         marker4.setSnippet(description);
@@ -109,8 +120,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.320358;
         nom = "City Park des Rochereaux";
         description = "Marquage au sol";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker5.setPosition(new GeoPoint(latitude, longitude));
         marker5.setTitle(nom);
         marker5.setSnippet(description);
@@ -123,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.331986;
         nom = "École Desnos";
         description = "Station virtuelle";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker6.setPosition(new GeoPoint(latitude, longitude));
         marker6.setTitle(nom);
         marker6.setSnippet(description);
@@ -137,7 +150,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.339631;
         nom = "City Park des Cosses";
         description = "Station virtuelle";
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker7.setPosition(new GeoPoint(latitude, longitude));
         marker7.setTitle(nom);
         marker7.setSnippet(description);
@@ -150,8 +165,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.343020;
         nom = "La Rivardière";
         description = "Station virtuelle";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker8.setPosition(new GeoPoint(latitude, longitude));
         marker8.setTitle(nom);
         marker8.setSnippet(description);
@@ -164,8 +180,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.305015;
         nom = "Square des Coudres";
         description = "Station virtuelle";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker9.setPosition(new GeoPoint(latitude, longitude));
         marker9.setTitle(nom);
         marker9.setSnippet(description);
@@ -178,8 +195,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.304255;
         nom = "Monfleury";
         description = "Station virtuelle";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker10.setPosition(new GeoPoint(latitude, longitude));
         marker10.setTitle(nom);
         marker10.setSnippet(description);
@@ -192,8 +210,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.302098;
         nom = "Les Hauts de l’Auxance";
         description = "Station virtuelle";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker11.setPosition(new GeoPoint(latitude, longitude));
         marker11.setTitle(nom);
         marker11.setSnippet(description);
@@ -206,8 +225,9 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.274485;
         nom = "Moulinet";
         description = "Station virtuelle";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker12.setPosition(new GeoPoint(latitude, longitude));
         marker12.setTitle(nom);
         marker12.setSnippet(description);
@@ -220,13 +240,26 @@ public class MainActivity extends AppCompatActivity {
         longitude = 0.279752;
         nom = "École de Limbre";
         description = "Station virtuelle";
-
-
+        if (!dbHelper.pointExist(latitude, longitude)) {
+            dbHelper.ajouterCoordonnees(latitude, longitude, nom, description);
+        }
         marker13.setPosition(new GeoPoint(latitude, longitude));
         marker13.setTitle(nom);
         marker13.setSnippet(description);
         marker13.setIcon(markerDrawable);
         map.getOverlays().add(marker13);
+
+
+        map.setBuiltInZoomControls(true);
+        map.setMultiTouchControls(true);
+
+        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(map);
+        map.getOverlays().add(myScaleBarOverlay);
+
+        CompassOverlay mCompassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()), map);
+        mCompassOverlay.enableCompass();
+        map.getOverlays().add(mCompassOverlay);
+
         Button myLocationButton = findViewById(R.id.my_location_button);
         myLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,7 +280,8 @@ public class MainActivity extends AppCompatActivity {
                 GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
                 myLocationOverlay.setEnabled(true);
                 if (centerMapOnLocation) {
-                    map.getController().animateTo(point);
+                    map.getController().setZoom(18.0);
+                    map.getController().setCenter(point);
                 }
                 centerMapOnLocation = false;
             }
@@ -289,7 +323,8 @@ public class MainActivity extends AppCompatActivity {
                         GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
                         myLocationOverlay.setEnabled(true);
                         if (centerMapOnLocation) {
-                            map.getController().animateTo(point);
+                            map.getController().setZoom(18.0);
+                            map.getController().setCenter(point);
                         }
                         centerMapOnLocation = false;
                     }
@@ -307,6 +342,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);

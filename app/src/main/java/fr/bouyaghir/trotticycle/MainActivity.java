@@ -3,13 +3,8 @@ package fr.bouyaghir.trotticycle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
+
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -17,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -26,20 +22,9 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.ScaleBarOverlay;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-import java.util.ArrayList;
-import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,11 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private MyLocationNewOverlay myLocationOverlay;
     private static final int PERMISSION_REQUEST_LOCATION = 1;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         Configuration.getInstance().load(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
@@ -66,194 +48,185 @@ public class MainActivity extends AppCompatActivity {
         mapController.setZoom(18.0);
         mapController.setCenter(startPoint);
 
-        ArrayList<OverlayItem> items = new ArrayList<>();
+        Drawable markerDrawable = ContextCompat.getDrawable(this, R.drawable.ic_marker_red);
 
-        // Créer un marqueur
-        Drawable Marker = ContextCompat.getDrawable(this, R.drawable.ic_marker_red);
-
-        Button button = new Button(this);
-        button.setText("Y ALLER");
-
-
-        // Marker 1 station marquage au sol
+// Point 1
         Marker marker1 = new Marker(map);
-        marker1.setPosition(new GeoPoint(46.634335,0.331986));
-        marker1.setTitle("Station 1");
-        marker1.setSnippet("Bois 1");
-        marker1.setIcon(Marker);
-        ((ViewGroup) marker1.getInfoWindow().getView()).addView(button);
+        double latitude = 46.619824;
+        double longitude = 0.315161;
+        String nom = "Cimetière";
+        String description = "Marquage au sol";
+
+        marker1.setPosition(new GeoPoint(latitude, longitude));
+        marker1.setTitle(nom);
+        marker1.setSnippet(description);
+        marker1.setIcon(markerDrawable);
         map.getOverlays().add(marker1);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Récupérer la position actuelle de l'utilisateur
-                GeoPoint startPoint = myLocationOverlay.getMyLocation();
-                if (startPoint == null) {
-                    Toast.makeText(MainActivity.this, "Impossible de récupérer votre position actuelle", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Créer une liste de points pour le trajet
-                ArrayList<GeoPoint> waypoints = new ArrayList<>();
-                waypoints.add(startPoint);
-                waypoints.add(marker1.getPosition()); // remplacer marker1.getPosition() par la position de la destination souhaitée
-
-                // Exécuter l'opération de réseau dans un AsyncTask
-                new AsyncTask<ArrayList<GeoPoint>, Void, Road>() {
-                    @Override
-                    protected Road doInBackground(ArrayList<GeoPoint>... params) {
-                        // Calculer la route entre les points
-                        RoadManager roadManager = new OSRMRoadManager(MainActivity.this, "https://routing.openstreetmap.fr/");
-                        Road road = roadManager.getRoad(params[0]);
-                        return road;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Road road) {
-                        // Afficher le trajet sur la carte
-                        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, Color.BLUE, 10);
-                        map.getOverlays().add(roadOverlay);
-                        map.invalidate(); // forcer la mise à jour de l'affichage
-                    }
-                }.execute(waypoints);
-            }
-        });
-
-
-        Button button2 = new Button(this);
-        button2.setText("Y ALLER");
-
-// Marker 2 station marquage au sol
+        // Point 2
         Marker marker2 = new Marker(map);
-        marker2.setPosition(new GeoPoint(46.627243,0.339631));
-        marker2.setTitle("Station 2");
-        marker2.setSnippet("Bois 2");
-        marker2.setIcon(Marker);
+        latitude = 46.620299;
+        longitude = 0.311018;
+        nom = "Stade";
+        description = "Marquage au sol";
+
+        marker2.setPosition(new GeoPoint(latitude, longitude));
+        marker2.setTitle(nom);
+        marker2.setSnippet(description);
+        marker2.setIcon(markerDrawable);
         map.getOverlays().add(marker2);
-        ;
 
-        Button button3 = new Button(this);
-        button3.setText("Y ALLER");
-
-// Marker 3 station marquage au sol
+        // Point 3
         Marker marker3 = new Marker(map);
-        marker3.setPosition(new GeoPoint(46.634269,0.343020));
-        marker3.setTitle("Station 3");
-        marker3.setSnippet("Bois 3");
-        marker3.setIcon(Marker);
+        latitude = 46.626667;
+        longitude = 0.311561;
+        nom = "Conservatoire";
+        description = "Marquage au sol";
+
+        marker3.setPosition(new GeoPoint(latitude, longitude));
+        marker3.setTitle(nom);
+        marker3.setSnippet(description);
+        marker3.setIcon(markerDrawable);
         map.getOverlays().add(marker3);
 
-
-
-
-        Button button4 = new Button(this);
-        button4.setText("Y ALLER");
-
-// Marker 4 station marquage au sol
+        // Point 4
         Marker marker4 = new Marker(map);
-        marker4.setPosition(new GeoPoint(46.626141,0.305015));
-        marker4.setTitle("Station 4");
-        marker4.setSnippet("Bois 4");
-        marker4.setIcon(Marker);
+        latitude = 46.627951;
+        longitude = 0.317551;
+        nom = "La Comberie";
+        description = "Marquage au sol";
+
+
+        marker4.setPosition(new GeoPoint(latitude, longitude));
+        marker4.setTitle(nom);
+        marker4.setSnippet(description);
+        marker4.setIcon(markerDrawable);
         map.getOverlays().add(marker4);
 
-
-        // Marker 5 station marquage au sol
+        // Point 5
         Marker marker5 = new Marker(map);
-        marker5.setPosition(new GeoPoint(46.629708,0.304255));
-        marker5.setTitle("Station 5");
-        marker5.setSnippet("Bois 5");
-        marker5.setIcon(Marker);
-        marker5.setIcon(Marker);
+        latitude = 46.634216;
+        longitude = 0.320358;
+        nom = "City Park des Rochereaux";
+        description = "Marquage au sol";
+
+
+        marker5.setPosition(new GeoPoint(latitude, longitude));
+        marker5.setTitle(nom);
+        marker5.setSnippet(description);
+        marker5.setIcon(markerDrawable);
         map.getOverlays().add(marker5);
 
-
-        // Marker 6 station marquage au sol
+        // Point 6
         Marker marker6 = new Marker(map);
-        marker6.setPosition(new GeoPoint(46.630532,0.302098));
-        marker6.setTitle("Station 6");
-        marker6.setSnippet("Bois 6");
-        marker6.setIcon(Marker);
-        marker6.setIcon(Marker);
+        latitude = 46.634335;
+        longitude = 0.331986;
+        nom = "École Desnos";
+        description = "Station virtuelle";
+
+
+        marker6.setPosition(new GeoPoint(latitude, longitude));
+        marker6.setTitle(nom);
+        marker6.setSnippet(description);
+        marker6.setIcon(markerDrawable);
         map.getOverlays().add(marker6);
 
-
-        // Marker 7 station marquage au sol
+        // Point 7
         Marker marker7 = new Marker(map);
-        marker7.setPosition(new GeoPoint(46.620046,0.274485));
-        marker7.setTitle("Station 7");
-        marker7.setSnippet("Bois 7");
-        marker7.setIcon(Marker);
-        marker7.setIcon(Marker);
-        map.getOverlays().add(marker7 );
+        latitude = 46.627243;
+        longitude = 0.339631;
+        nom = "City Park des Cosses";
+        description = "Station virtuelle";
+
+        marker7.setPosition(new GeoPoint(latitude, longitude));
+        marker7.setTitle(nom);
+        marker7.setSnippet(description);
+        marker7.setIcon(markerDrawable);
+        map.getOverlays().add(marker7);
+
+        // Point 8
+        Marker marker8 = new Marker(map);
+        latitude = 46.634269;
+        longitude = 0.343020;
+        nom = "La Rivardière";
+        description = "Station virtuelle";
 
 
-        // Marker 7 station marquage au sol
+        marker8.setPosition(new GeoPoint(latitude, longitude));
+        marker8.setTitle(nom);
+        marker8.setSnippet(description);
+        marker8.setIcon(markerDrawable);
+        map.getOverlays().add(marker8);
+
+        // Point 9
         Marker marker9 = new Marker(map);
-        marker9.setPosition(new GeoPoint(46.625133,0.279752));
-        marker9.setTitle("Station 7");
-        marker9.setSnippet("Bois 7");
-        marker9.setIcon(Marker);
-        marker9.setIcon(Marker);
+        latitude = 46.626141;
+        longitude = 0.305015;
+        nom = "Square des Coudres";
+        description = "Station virtuelle";
+
+
+        marker9.setPosition(new GeoPoint(latitude, longitude));
+        marker9.setTitle(nom);
+        marker9.setSnippet(description);
+        marker9.setIcon(markerDrawable);
         map.getOverlays().add(marker9);
 
-        Marker Station3 = new Marker(map);
-        Station3.setPosition(new GeoPoint(46.626667,0.311561));
-        Station3.setTitle("Rue Louis Plaud");
-        Station3.setSnippet("Trotti 3 ");
-        Station3.setIcon(Marker);
-        Station3.setIcon(Marker);
-        map.getOverlays().add(Station3);
+        // Point 10
+        Marker marker10 = new Marker(map);
+        latitude = 46.629708;
+        longitude = 0.304255;
+        nom = "Monfleury";
+        description = "Station virtuelle";
 
-        Marker Station4 = new Marker(map);
-        Station4.setPosition(new GeoPoint(46.620299 ,0.311018));
-        Station4.setTitle("Eglise");
-        Station4.setSnippet("Trotti 4 ");
-        Station4.setIcon(Marker);
-        Station4.setIcon(Marker);
-        map.getOverlays().add(Station4);
 
-        Marker Station5 = new Marker(map);
-        Station5.setPosition(new GeoPoint(46.619824,0.315161));
-        Station5.setTitle("Cimetiere du Porteau");
-        Station5.setSnippet("Trotti 5 ");
-        Station5.setIcon(Marker);
-        Station5.setIcon(Marker);
-        map.getOverlays().add(Station5);
+        marker10.setPosition(new GeoPoint(latitude, longitude));
+        marker10.setTitle(nom);
+        marker10.setSnippet(description);
+        marker10.setIcon(markerDrawable);
+        map.getOverlays().add(marker10);
 
-        Marker Station6 = new Marker(map);
-        Station6.setPosition(new GeoPoint(46.627951,0.317551));
-        Station6.setTitle("Parc de la Comberie");
-        Station6.setSnippet("Trotti 6 ");
-        Station6.setIcon(Marker);
-        Station6.setIcon(Marker);
-        map.getOverlays().add(Station6);
+        // Point 11
+        Marker marker11 = new Marker(map);
+        latitude = 46.630532;
+        longitude = 0.302098;
+        nom = "Les Hauts de l’Auxance";
+        description = "Station virtuelle";
 
-        Marker Station7 = new Marker(map);
-        Station7.setPosition(new GeoPoint(46.634216,0.320358));
-        Station7.setTitle("Parc des Rocheraux");
-        Station7.setSnippet("Trotti 7 ");
-        Station7.setIcon(Marker);
-        Station7.setIcon(Marker);
-        map.getOverlays().add(Station7);
 
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
+        marker11.setPosition(new GeoPoint(latitude, longitude));
+        marker11.setTitle(nom);
+        marker11.setSnippet(description);
+        marker11.setIcon(markerDrawable);
+        map.getOverlays().add(marker11);
 
-        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(map);
-        map.getOverlays().add(myScaleBarOverlay);
+        // Point 12
+        Marker marker12 = new Marker(map);
+        latitude = 46.620046;
+        longitude = 0.274485;
+        nom = "Moulinet";
+        description = "Station virtuelle";
 
-        CompassOverlay mCompassOverlay = new CompassOverlay(getApplicationContext(), new InternalCompassOrientationProvider(getApplicationContext()), map);
-        mCompassOverlay.enableCompass();
-        map.getOverlays().add(mCompassOverlay);
 
-        // Initialiser l'overlay de la position de l'utilisateur
-        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
-        myLocationOverlay.enableMyLocation(); // Accès à la localisation
-        map.getOverlays().add(myLocationOverlay);
+        marker12.setPosition(new GeoPoint(latitude, longitude));
+        marker12.setTitle(nom);
+        marker12.setSnippet(description);
+        marker12.setIcon(markerDrawable);
+        map.getOverlays().add(marker12);
 
-// Ajouter un bouton pour centrer la carte sur la position de l'utilisateur
+        // Point 13
+        Marker marker13 = new Marker(map);
+        latitude = 46.625133;
+        longitude = 0.279752;
+        nom = "École de Limbre";
+        description = "Station virtuelle";
+
+
+        marker13.setPosition(new GeoPoint(latitude, longitude));
+        marker13.setTitle(nom);
+        marker13.setSnippet(description);
+        marker13.setIcon(markerDrawable);
+        map.getOverlays().add(marker13);
         Button myLocationButton = findViewById(R.id.my_location_button);
         myLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,83 +241,90 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-// Créer un LocationListener pour recevoir les mises à jour de la position de l'utilisateur
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                // Récupérer la nouvelle position de l'utilisateur
                 GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
-
-                // Activer l'overlay de la position de l'utilisateur
                 myLocationOverlay.setEnabled(true);
-
-                //Si la map est centrée sur la position de l'utilisateur
                 if (centerMapOnLocation) {
                     map.getController().animateTo(point);
                 }
-
-                // Réinitialiser le flag de centrage de la carte
                 centerMapOnLocation = false;
             }
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-                // Gérer les changements de statut du fournisseur de localisation
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-                // Gérer l'activation du fournisseur de localisation
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-                // Gérer la désactivation du fournisseur de localisation
             }
         };
 
-// Vérifier si l'application a la permission d'accéder à la localisation de l'utilisateur
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_LOCATION);
         } else {
-            // Si l'application a la permission, commencer à écouter les mises à jour de la localisation de l'utilisateur
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
 
-
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(), items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-            @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onItemLongPress(int index, OverlayItem item) {
-                return false;
-            }
-        });
-
-        mOverlay.setFocusItemsOnTap(true);
-        map.getOverlays().add(mOverlay);
-    }
-
-
-    @Override
-    public void onPause(){
-
-        super.onPause();
-        map.onPause();
-
+        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this), map);
+        myLocationOverlay.enableMyLocation();
+        map.getOverlays().add(myLocationOverlay);
     }
 
     @Override
-    public void onResume(){
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                LocationListener locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
+                        myLocationOverlay.setEnabled(true);
+                        if (centerMapOnLocation) {
+                            map.getController().animateTo(point);
+                        }
+                        centerMapOnLocation = false;
+                    }
 
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
+
+                    @Override
+                    public void onProviderEnabled(String provider) {
+                    }
+
+                    @Override
+                    public void onProviderDisabled(String provider) {
+                    }
+                };
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            } else {
+                Toast.makeText(this, "Permission de localisation refusée", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
         super.onResume();
         map.onResume();
-
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        map.onPause();
+    }
 }
